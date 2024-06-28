@@ -1,0 +1,39 @@
+@import './fonts.scss';
+@import './variables.scss';
+
+html {
+	box-sizing: border-box;
+	text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	outline: none;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	min-width: 360px;
+	font-weight: 400;
+	font-family: $font;
+	line-height: 1;
+	text-rendering: optimizespeed;
+	background-color: #f5f5f5;
+}
+
+a {
+	display: inline-block;
+	color: $primary;
+	text-decoration: none;
+}
