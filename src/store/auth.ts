@@ -1,34 +1,40 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-import { AuthState } from '../interfaces/AuthState'
+import { UserState } from '../interfaces/UserState'
 
-export const useAuthStore = defineStore('auth', {
-	state: (): AuthState => ({
-		user: null,
-		token: null
-	}),
+export const useAuthStore = defineStore('auth', () => {
+	const user = ref<UserState | null>(null)
+	const token = ref<string | null>(null)
 
-	actions: {
-		setAuth(token: string) {
-			this.token = token
-			const [username] = atob(token).split(':')
-			this.user = { username }
-		},
+	function setAuth(newToken: string) {
+		token.value = newToken
+		const [username] = atob(newToken).split(':')
+		user.value = { username }
+	}
 
-		login(token: string) {
-			this.setAuth(token)
-			localStorage.setItem('token', token)
-		},
+	function login(newToken: string) {
+		setAuth(newToken)
+		localStorage.setItem('token', newToken)
+	}
 
-		logout() {
-			this.user = null
-			this.token = null
-			localStorage.removeItem('token')
-		},
+	function logout() {
+		user.value = null
+		token.value = null
+		localStorage.removeItem('token')
+	}
 
-		checkAuth() {
-			const token = localStorage.getItem('token')
-			token && this.setAuth(token)
-		}
+	function checkAuth() {
+		const storedToken = localStorage.getItem('token')
+		storedToken && setAuth(storedToken)
+	}
+
+	return {
+		user,
+		token,
+		setAuth,
+		login,
+		logout,
+		checkAuth
 	}
 })

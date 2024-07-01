@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../store/auth'
-import { mockRegister } from '../mocks/auth'
 
-import AppScreen from '../components/app/AppScreen.vue'
+import { useAuthStore } from '../../store/auth'
+import { mockRegister } from '../../mocks/auth'
 
-import UiInput from '../components/ui/UiInput.vue'
-import UiButton from '../components/ui/UiButton.vue'
+import AppScreen from '../../components/app/AppScreen.vue'
 
-const username = ref('')
-const password = ref('')
+import UiInput from '../../components/ui/UiInput.vue'
+import UiButton from '../../components/ui/UiButton.vue'
+
 const router = useRouter()
 const authStore = useAuthStore()
 
-const handleSubmit = async () => {
+const username = ref<string>('')
+const password = ref<string>('')
+
+async function handleSubmit() {
 	try {
 		const token = await mockRegister(username.value, password.value)
 		authStore.login(token)
@@ -32,6 +34,7 @@ const handleSubmit = async () => {
 			<UiInput v-model="username" type="text" placeholder="Логин" />
 			<UiInput v-model="password" type="password" placeholder="Пароль" />
 			<UiButton type="submit">Зарегистрироваться</UiButton>
+			<strong class="form__subtitle">Страница входа</strong>
 			<UiButton @click="$router.push('/login')">Войти</UiButton>
 		</form>
 	</AppScreen>

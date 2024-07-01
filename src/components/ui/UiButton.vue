@@ -12,7 +12,7 @@ const emit = defineEmits(['click'])
 </script>
 
 <template>
-	<button class="ui-button" :type="type" @click="$emit('click')">
+	<button class="ui-button" :type="type" @click="$emit('click', $event)">
 		<slot></slot>
 	</button>
 </template>

@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../store/auth'
-import { mockLogin } from '../mocks/auth'
 
-import AppScreen from '../components/app/AppScreen.vue'
+import { useAuthStore } from '../../store/auth'
+import { mockLogin } from '../../mocks/auth'
 
-import UiInput from '../components/ui/UiInput.vue'
-import UiButton from '../components/ui/UiButton.vue'
+import AppScreen from '../../components/app/AppScreen.vue'
 
-const username = ref('')
-const password = ref('')
+import UiInput from '../../components/ui/UiInput.vue'
+import UiButton from '../../components/ui/UiButton.vue'
+
 const router = useRouter()
 const authStore = useAuthStore()
 
-const handleSubmit = async () => {
+const username = ref<string>('')
+const password = ref<string>('')
+
+async function handleSubmit() {
 	try {
 		const token = await mockLogin(username.value, password.value)
 		authStore.login(token)
@@ -32,6 +34,7 @@ const handleSubmit = async () => {
 			<UiInput v-model="username" type="text" placeholder="Логин" />
 			<UiInput v-model="password" type="password" placeholder="Пароль" />
 			<UiButton type="submit">Войти</UiButton>
+			<strong class="form__subtitle">Страница регистрации</strong>
 			<UiButton @click="$router.push('/register')">Регистрация</UiButton>
 		</form>
 	</AppScreen>
@@ -48,6 +51,11 @@ const handleSubmit = async () => {
 	background-color: $white;
 
 	&__title {
+		text-align: center;
+	}
+
+	&__subtitle {
+		font-size: 20px;
 		text-align: center;
 	}
 }

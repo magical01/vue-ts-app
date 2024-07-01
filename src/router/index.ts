@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomePage from '../pages/HomePage.vue'
-import LoginPage from '../pages/LoginPage.vue'
-import RegisterPage from '../pages/RegisterPage.vue'
+import Home from '../pages/index/Home.vue'
+import Login from '../pages/auth/Login.vue'
+import Register from '../pages/auth/Register.vue'
 
 import { useAuthStore } from '../store/auth'
 
@@ -10,18 +10,18 @@ const routes = [
 	{
 		path: '/',
 		name: 'Home',
-		component: HomePage,
+		component: Home,
 		meta: { requiresAuth: true }
 	},
 	{
 		path: '/login',
 		name: 'Login',
-		component: LoginPage
+		component: Login
 	},
 	{
 		path: '/register',
 		name: 'Register',
-		component: RegisterPage
+		component: Register
 	}
 ]
 
