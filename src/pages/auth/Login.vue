@@ -10,12 +10,32 @@ import AppScreen from '../../components/app/AppScreen.vue'
 import UiInput from '../../components/ui/UiInput.vue'
 import UiButton from '../../components/ui/UiButton.vue'
 
+/**
+ * Инициализация роутера для навигации.
+ * @type {Router}
+ */
 const router = useRouter()
+/**
+ * Store аутентификации.
+ * @type {ReturnType<typeof useAuthStore>}
+ */
 const authStore = useAuthStore()
 
+/**
+ * Логин пользователя.
+ * @type {import('vue').Ref<string>}
+ */
 const username = ref<string>('')
+/**
+ * Пароль пользователя.
+ * @type {import('vue').Ref<string>}
+ */
 const password = ref<string>('')
 
+/**
+ * Обрабатывает отправку формы входа.
+ * @returns {Promise<void>}
+ */
 async function handleSubmit() {
 	try {
 		const token = await mockLogin(username.value, password.value)
@@ -49,6 +69,10 @@ async function handleSubmit() {
 	padding: 24px;
 	width: 360px;
 	background-color: $white;
+
+	@include mobile {
+		width: 90%;
+	}
 
 	&__title {
 		text-align: center;

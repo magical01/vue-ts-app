@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 
+/**
+ * Компонент кнопки.
+ *
+ * @prop {string} type - Тип кнопки (button или submit).
+ * @emits click - Событие клика на кнопку.
+ */
 defineProps({
 	type: {
 		type: String as () => 'button' | 'submit',
@@ -30,10 +36,14 @@ const emit = defineEmits(['click'])
 	color: $white;
 	transition: $transition;
 
-	@media (any-hover: hover) {
+	@include hover {
 		&:hover {
 			background-color: $accent;
 		}
+	}
+
+	@include mobile {
+		padding: 12px 20px;
 	}
 }
 </style>

@@ -1,6 +1,17 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
+/**
+ * Компонент контекстного меню.
+ *
+ * @prop {Object} position - Позиция меню.
+ * @prop {number} position.x - Координата X.
+ * @prop {number} position.y - Координата Y.
+ * @prop {Array} actions - Список действий меню.
+ * @prop {string} actions[].label - Метка действия.
+ * @prop {string} actions[].action - Идентификатор действия.
+ * @emits select - Событие выбора действия.
+ */
 const props = defineProps<{
 	position: { x: number; y: number }
 	actions: Array<{ label: string; action: string }>
@@ -43,7 +54,7 @@ function selectAction(action: string) {
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
 
-		@media (any-hover: hover) {
+		@include hover {
 			&:hover {
 				color: $primary;
 				background-color: #f0f0f0;

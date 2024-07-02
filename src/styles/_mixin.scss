@@ -1,0 +1,21 @@
+// adaptive
+@mixin tablet {
+	@media (max-width: (1200px)) {
+		@content;
+	}
+}
+
+@mixin mobile {
+	@media (max-width: (767px)) {
+		@content;
+	}
+}
+
+// hover
+@mixin hover {
+	@media (any-hover: hover) {
+		&:hover {
+			@content;
+		}
+	}
+}

@@ -17,33 +17,83 @@ const props = defineProps<{
 
 const equipmentStore = useEquipmentStore()
 
+/**
+ * Показывает ли контекстное меню.
+ * @type {Ref<boolean>}
+ */
 const showMenu = ref<boolean>(false)
+
+/**
+ * Позиция контекстного меню.
+ * @type {Ref<{ x: number, y: number }>}
+ */
 const menuPosition = ref({ x: 0, y: 0 })
+
+/**
+ * Выбранное оборудование.
+ * @type {Ref<Equipment | null>}
+ */
 const selectedEquipment = ref<Equipment | null>(null)
 
+/**
+ * Показывает ли модальное окно.
+ * @type {Ref<boolean>}
+ */
 const showModal = ref<boolean>(false)
+
+/**
+ * Заголовок модального окна.
+ * @type {Ref<string>}
+ */
 const modalTitle = ref<string>('')
+
+/**
+ * Данные формы для модального окна.
+ * @type {Ref<Partial<Equipment>>}
+ */
 const formData = ref<Partial<Equipment>>({})
 
+/**
+ * Действия контекстного меню.
+ * @type {Array<{ label: string, action: string }>}
+ */
 const menuActions = [
 	{ label: 'Добавить', action: 'add' },
 	{ label: 'Изменить', action: 'edit' },
 	{ label: 'Удалить', action: 'delete' }
 ]
 
-const tableLabel = [{ label: 'Название' }, { label: 'Тип' }, { label: 'Серийный номер' }, { label: 'Дата установки' }]
+/**
+ * Метки таблицы.
+ * @type {Array<{ label: string }>}
+ */
+const tableLabel = [{ label: 'Название' }, { label: 'Тип' }, { label: 'Дата установки' }]
 
+/**
+ * Список оборудования, соответствующий выбранному элементу.
+ * @type {ComputedRef<Equipment[]>}
+ */
 const equipmentList = computed(() => {
-	if (props.selectedItem && isLastChild(props.selectedItem)) {
+	if (props.selectedItem && isLastChild(props.selectedItem) && props.selectedItem?.id.length === 9) {
 		return equipmentStore.getEquipment(props.selectedItem.id)
 	}
 	return []
 })
 
+/**
+ * Проверяет, является ли элемент последним потомком.
+ * @param {TreeItem} item - Элемент дерева.
+ * @returns {boolean} - True, если элемент не имеет детей.
+ */
 function isLastChild(item: TreeItem) {
 	return !item.children || item.children.length === 0
 }
 
+/**
+ * Показывает контекстное меню.
+ * @param {MouseEvent} event - Событие мыши.
+ * @param {Equipment | null} equipment - Оборудование.
+ */
 function showContextMenu(event: MouseEvent, equipment: Equipment | null) {
 	if (!event) return
 
@@ -54,8 +104,13 @@ function showContextMenu(event: MouseEvent, equipment: Equipment | null) {
 	showMenu.value = true
 }
 
+/**
+ * Обрабатывает действие контекстного меню.
+ * @param {string} action - Действие.
+ */
 function handleMenuAction(action: string) {
-	showMenu.value = false
+	if (showMenu.value) showMenu.value = false
+
 	if (!props.selectedItem) return
 
 	switch (action) {
@@ -79,6 +134,9 @@ function handleMenuAction(action: string) {
 	}
 }
 
+/**
+ * Отправляет форму.
+ */
 function submitForm() {
 	if (!props.selectedItem) return
 
@@ -92,11 +150,18 @@ function submitForm() {
 	closeModal()
 }
 
+/**
+ * Закрывает модальное окно.
+ */
 function closeModal() {
 	showModal.value = false
 	formData.value = {}
 }
 
+/**
+ * Обрабатывает клик вне контекстного меню.
+ * @param {MouseEvent} event - Событие мыши.
+ */
 function handleOutsideClick(event: MouseEvent) {
 	const target = event.target as HTMLElement
 
@@ -110,7 +175,7 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick))
 
 <template>
 	<div class="equipment-wrapper">
-		<div v-if="selectedItem && isLastChild(selectedItem)" class="equipment">
+		<div v-if="selectedItem && isLastChild(selectedItem) && props.selectedItem?.id.length === 9" class="equipment">
 			<h2>Оборудование для {{ selectedItem.name }}</h2>
 			<table class="equipment__table">
 				<thead>
@@ -121,16 +186,12 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick))
 				<tbody>
 					<tr v-for="equipment in equipmentList" :key="equipment.id" @contextmenu="showContextMenu($event, equipment)">
 						<td v-for="(item, index) in Object.values(equipment).slice(1)" :key="index">{{ item }}</td>
-						<!-- <td>{{ equipment.name }}</td>
-						<td>{{ equipment.type }}</td>
-						<td>{{ equipment.serialNumber }}</td>
-						<td>{{ equipment.installationDate }}</td> -->
 					</tr>
 				</tbody>
 			</table>
 			<UiButton type="button" @click="showContextMenu($event, null)">Добавить оборудование</UiButton>
 		</div>
-		<div v-else class="no-equipment">Нет оборудования для отображения</div>
+		<div v-else class="no-equipment">Кликни по последнему элементу дерева</div>
 
 		<UiContextMenu v-if="showMenu" :position="menuPosition" :actions="menuActions" @select="handleMenuAction" />
 
@@ -145,10 +206,6 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick))
 					<div>
 						<label>Тип:</label>
 						<UiInput v-model="formData.type" placeholder="Тип" required />
-					</div>
-					<div>
-						<label>Серийный номер:</label>
-						<UiInput v-model="formData.serialNumber" placeholder="Серийный номер" required />
 					</div>
 					<div>
 						<label>Дата установки:</label>
@@ -168,10 +225,18 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick))
 	border-radius: 8px;
 	background-color: #f9f9f9;
 
+	@include mobile {
+		padding: 10px;
+	}
+
 	h2 {
 		margin-bottom: 20px;
 		font-size: 24px;
 		text-align: center;
+
+		@include tablet {
+			font-size: 16px;
+		}
 	}
 
 	&__table {
@@ -188,14 +253,22 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick))
 
 		th {
 			background-color: #f2f2f2;
+
+			@include tablet {
+				font-size: 14px;
+			}
 		}
 
 		tr:nth-child(even) {
 			background-color: #f9f9f9;
 		}
 
-		tr:hover {
-			background-color: #f1f1f1;
+		tr {
+			@include hover {
+				&:hover {
+					background-color: #f1f1f1;
+				}
+			}
 		}
 	}
 }
@@ -204,6 +277,10 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick))
 	margin-bottom: 20px;
 	text-align: center;
 	color: #999;
+
+	@include tablet {
+		font-size: 14px;
+	}
 }
 
 .modal__form {

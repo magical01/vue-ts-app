@@ -6,6 +6,10 @@ import Register from '../pages/auth/Register.vue'
 
 import { useAuthStore } from '../store/auth'
 
+/**
+ * Определение маршрутов для приложения.
+ * @type {Array<Object>}
+ */
 const routes = [
 	{
 		path: '/',
@@ -25,11 +29,22 @@ const routes = [
 	}
 ]
 
+/**
+ * Создает и настраивает роутер.
+ * @returns {Router} Экземпляр роутера.
+ */
 const router = createRouter({
 	history: createWebHistory(),
 	routes
 })
 
+/**
+ * Проверяет перед каждым переходом, требуется ли аутентификация для маршрута.
+ * Если требуется и пользователь не аутентифицирован, перенаправляет на страницу логина.
+ * @param {RouteLocationNormalized} to - Маршрут, на который происходит переход.
+ * @param {RouteLocationNormalized} from - Маршрут, с которого происходит переход.
+ * @param {Function} next - Функция для продолжения или отмены перехода.
+ */
 router.beforeEach((to, _from, next) => {
 	const authStore = useAuthStore()
 	authStore.checkAuth()

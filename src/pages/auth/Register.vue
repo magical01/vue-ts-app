@@ -10,12 +10,32 @@ import AppScreen from '../../components/app/AppScreen.vue'
 import UiInput from '../../components/ui/UiInput.vue'
 import UiButton from '../../components/ui/UiButton.vue'
 
+/**
+ * Инициализация роутера для навигации.
+ * @type {Router}
+ */
 const router = useRouter()
+/**
+ * Store аутентификации.
+ * @type {ReturnType<typeof useAuthStore>}
+ */
 const authStore = useAuthStore()
 
+/**
+ * Логин пользователя.
+ * @type {import('vue').Ref<string>}
+ */
 const username = ref<string>('')
+/**
+ * Пароль пользователя.
+ * @type {import('vue').Ref<string>}
+ */
 const password = ref<string>('')
 
+/**
+ * Обрабатывает отправку формы регистрации.
+ * @returns {Promise<void>}
+ */
 async function handleSubmit() {
 	try {
 		const token = await mockRegister(username.value, password.value)

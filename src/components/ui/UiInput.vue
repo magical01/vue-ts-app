@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 
+/**
+ * Компонент ввода.
+ *
+ * @prop {string} modelValue - Значение модели.
+ * @prop {string} [type='text'] - Тип ввода.
+ * @prop {string} [placeholder=''] - Подсказка ввода.
+ * @emits update:modelValue - Событие обновления значения модели.
+ */
 const props = defineProps<{
-	modelValue: string
+	modelValue?: string
 	type?: string
 	placeholder?: string
 }>()
@@ -11,8 +19,8 @@ const emit = defineEmits<{
 	(e: 'update:modelValue', value: string): void
 }>()
 
-const type = props.type || 'text'
-const placeholder = props.placeholder || ''
+const type: string = props.type || 'text'
+const placeholder: string = props.placeholder || ''
 
 const handleInput = (event: Event) => {
 	const target = event.target as HTMLInputElement
@@ -34,10 +42,14 @@ const handleInput = (event: Event) => {
 	background-color: $white;
 	transition: $transition;
 
-	@media (any-hover: hover) {
+	@include hover {
 		&:hover {
 			border-color: $primary;
 		}
+	}
+
+	@include mobile {
+		padding: 10px 14px;
 	}
 }
 </style>

@@ -23,6 +23,10 @@
 		align-items: center;
 		width: 50%;
 		background-color: $primary;
+
+		@include tablet {
+			display: none;
+		}
 	}
 
 	&__left-title {
@@ -38,6 +42,10 @@
 		justify-content: center;
 		width: 50%;
 		background-color: $background;
+
+		@include tablet {
+			width: 100%;
+		}
 	}
 }
 </style>

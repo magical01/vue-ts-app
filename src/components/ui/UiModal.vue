@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * Компонент модального окна.
+ *
+ * @emits close - Событие закрытия модального окна.
+ */
 defineEmits<{
 	(e: 'close'): void
 }>()
