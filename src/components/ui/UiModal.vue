@@ -44,6 +44,10 @@ defineEmits<{
 	width: 80%;
 	max-width: 500px;
 
+	@include mobile {
+		width: 90%;
+	}
+
 	header {
 		display: flex;
 		justify-content: space-between;

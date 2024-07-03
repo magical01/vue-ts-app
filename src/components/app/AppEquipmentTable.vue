@@ -270,6 +270,12 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick))
 				}
 			}
 		}
+
+		td {
+			@include mobile {
+				font-size: 13px;
+			}
+		}
 	}
 }
 
