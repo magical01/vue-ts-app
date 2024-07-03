@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
-import { useAuthStore } from '../../store/auth'
 import { useMenuStore } from '../../store/menuStore'
 
 import AppSidePanel from '../../components/app/AppSidePanel.vue'
@@ -12,25 +10,12 @@ import AppEquipmentTable from '../../components/app/AppEquipmentTable.vue'
 import UiBurger from '../../components/ui/UiBurger.vue'
 
 import { TreeItem } from '../../interfaces/TreeItem'
-import { UserState } from '../../interfaces/UserState'
 
-/**
- * Инициализация роутера для навигации.
- * @type {Router}
- */
-const router = useRouter()
 /**
  * Store аутентификации.
  * @type {ReturnType<typeof useAuthStore>}
  */
-const authStore = useAuthStore()
 const menuStore = useMenuStore()
-
-/**
- * Текущий пользователь.
- * @type {import('vue').Ref<UserState | null>}
- */
-const user = ref<UserState | null>(authStore.user)
 
 /**
  * Выбранный элемент дерева.
@@ -45,11 +30,6 @@ const selectedItem = ref<TreeItem | null>(null)
 function onItemSelected(item: TreeItem) {
 	selectedItem.value = item
 }
-
-/**
- * Перенаправление на страницу логина, если пользователь не аутентифицирован.
- */
-onMounted(() => !user.value && router.push('/login'))
 </script>
 
 <template>
